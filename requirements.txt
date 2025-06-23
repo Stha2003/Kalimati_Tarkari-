@@ -1,4 +1,6 @@
 streamlit
 pandas
-altair
 plotly
+scikit-learn
+pydeck
+matplotlib

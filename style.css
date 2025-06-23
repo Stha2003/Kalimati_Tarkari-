@@ -1,0 +1,37 @@
+/* MAIN DASHBOARD CONTAINER */
+section.main {
+    background-color: #0f1117;
+    color: #f0f0f0;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+
+
+/* Title Styling */
+h1, h2, h3 {
+    color: #ffffff;
+}
+
+/* Chart containers inside cards */
+.plot-container {
+    border-radius: 12px;
+    background-color: transparent !important;
+}
+
+/* Scrollbar styling */
+section.main ::-webkit-scrollbar {
+    width: 8px;
+}
+section.main ::-webkit-scrollbar-thumb {
+    background-color: #444;
+    border-radius: 4px;
+}
+
+
+/* Optional: Add padding for ML output inside card */
+.model-output {
+    font-size: 0.9rem;
+    line-height: 1.5;
+    color: #e0e0e0;
+    white-space: pre-wrap;
+}
