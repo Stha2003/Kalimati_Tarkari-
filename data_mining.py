@@ -16,7 +16,7 @@ def prepare_data(df, commodity):
     df["Day"] = pd.to_datetime(df["Date"]).dt.day
     df["Weekday"] = pd.to_datetime(df["Date"]).dt.weekday
 
-    features = ["Month", "Day", "Weekday"]  # Removed Minimum & Maximum to prevent data leakage
+    features = ["Month", "Day", "Weekday"]  
     df.dropna(subset=features + ["Price_Category"], inplace=True)
 
     X = df[features]
@@ -66,14 +66,14 @@ def run_decision_tree(df, commodity):
     report_df = evaluate_model(y_test, y_pred, le)
     st.dataframe(report_df.style.format(precision=2))
 
-    st.markdown("Graph :")
-    fig, ax = plt.subplots()
-    pd.Series(model.feature_importances_, index=features).sort_values().plot.barh(ax=ax)
-    ax.set_facecolor('#1e1e2f')
-    fig.patch.set_facecolor('#1e1e2f')
-    ax.tick_params(colors='white')
-    ax.title.set_color('white')
-    st.pyplot(fig)
+    # st.markdown("Graph :")
+    # fig, ax = plt.subplots()
+    # pd.Series(model.feature_importances_, index=features).sort_values().plot.barh(ax=ax)
+    # ax.set_facecolor('#1e1e2f')
+    # fig.patch.set_facecolor('#1e1e2f')
+    # ax.tick_params(colors='white')
+    # ax.title.set_color('white')
+    # st.pyplot(fig)
     st.markdown('</div>', unsafe_allow_html=True)
 
 
@@ -90,12 +90,12 @@ def run_random_forest(df, commodity):
     report_df = evaluate_model(y_test, y_pred, le)
     st.dataframe(report_df.style.format(precision=2))
 
-    st.markdown("Graph :")
-    fig, ax = plt.subplots()
-    pd.Series(model.feature_importances_, index=features).sort_values().plot.barh(ax=ax)
-    ax.set_facecolor('#1e1e2f')
-    fig.patch.set_facecolor('#1e1e2f')
-    ax.tick_params(colors='white')
-    ax.title.set_color('white')
-    st.pyplot(fig)
+    # st.markdown("Graph :")
+    # fig, ax = plt.subplots()
+    # pd.Series(model.feature_importances_, index=features).sort_values().plot.barh(ax=ax)
+    # ax.set_facecolor('#1e1e2f')
+    # fig.patch.set_facecolor('#1e1e2f')
+    # ax.tick_params(colors='white')
+    # ax.title.set_color('white')
+    # st.pyplot(fig)
     st.markdown('</div>', unsafe_allow_html=True)
