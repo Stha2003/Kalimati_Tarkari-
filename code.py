@@ -1,10 +1,10 @@
-# kalimati_dashboard/app.py
+# ----------- kalimati_dashboard/app.py -----------
 
 import streamlit as st
 import pandas as pd
 import plotly.express as px
 from Components.map import show_kalimati_map
-from data_mining import run_decision_tree, run_random_forest
+from data_mining import run_decision_tree, run_random_forest, run_random_forest_regression
 
 # ---------- 1. Page Config ----------
 st.set_page_config(
@@ -15,7 +15,7 @@ st.set_page_config(
 
 # ---------- 1.1 Load CSS ----------
 with open("style.css") as f:
-    st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
+    st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True) 
 
 # ---------- 2. Load & Prepare ----------
 @st.cache_data
@@ -52,7 +52,6 @@ filtered_df = df[
 ].sort_values("Date")
 
 # ---------- 5. Charts ----------
-# Daily Line Chart
 line_chart = px.line(
     filtered_df,
     x="Date",
@@ -63,7 +62,6 @@ line_chart = px.line(
 )
 line_chart.update_layout(template="plotly_dark")
 
-# Monthly Average Bar Chart
 month_order = [
     "January", "February", "March", "April", "May", "June",
     "July", "August", "September", "October", "November", "December",
@@ -85,11 +83,9 @@ bar_chart = px.bar(
 bar_chart.update_layout(template="plotly_dark")
 
 # ---------- 6. Dashboard Layout ----------
-# Title
 st.title(f" Price Dashboard: {selected_commodity} ({selected_year})")
 st.markdown("Source: Kalimati Tarkari Bazar")
 
-# Charts in cards
 col1, col2 = st.columns([1, 1])
 with col1:
     with st.container():
@@ -116,7 +112,12 @@ with model_col1:
 with model_col2:
     run_random_forest(df, selected_commodity)
 
-# ---------- 8. Bottom: Map and Raw Data ----------
+# ---------- 7.5 Regression ----------
+st.markdown("---")
+st.subheader(" Predict Future Average Prices ")
+run_random_forest_regression(df, selected_commodity)
+
+# ---------- 8. Map and Raw Data ----------
 bottom1, bottom2 = st.columns([1, 1])
 with bottom1:
     with st.container():
