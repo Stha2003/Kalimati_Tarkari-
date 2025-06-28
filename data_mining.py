@@ -1,11 +1,13 @@
 # ----------- data_mining.py -----------
 
+from operator import le
 import streamlit as st
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier, RandomForestRegressor
+from sklearn.ensemble import AdaBoostRegressor
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.metrics import precision_score, recall_score, f1_score, mean_squared_error, r2_score
 from sklearn.preprocessing import LabelEncoder
@@ -116,9 +118,12 @@ def run_random_forest_regression(df, selected_commodity):
         st.warning(f"Not enough data to run regression for {selected_commodity}.")
         return
 
+    # Keep the date index
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+    date_test = df.loc[X_test.index, "Date"]
 
-    model = RandomForestRegressor(random_state=42)
+    # model = RandomForestRegressor(random_state=100, n_estimators= 200)
+    model = AdaBoostRegressor(n_estimators= 100, learning_rate= 0.4, loss= 'square')
     model.fit(X_train, y_train)
     predicted = model.predict(X_test)
 
@@ -130,14 +135,21 @@ def run_random_forest_regression(df, selected_commodity):
     st.markdown(f"**R² Score**: {r2:.2f}")
 
     result_df = pd.DataFrame({
+        "Date": date_test,
         "Actual": y_test.values,
         "Predicted": predicted
-    })
+    }).sort_values("Date")
 
     import plotly.graph_objs as go
     fig = go.Figure()
-    fig.add_trace(go.Scatter(y=result_df["Actual"], mode="lines+markers", name="Actual"))
-    fig.add_trace(go.Scatter(y=result_df["Predicted"], mode="lines+markers", name="Predicted"))
-    fig.update_layout(title="Actual vs Predicted Average Price", template="plotly_dark", xaxis_title="Index")
+    fig.add_trace(go.Scatter(x=result_df["Date"], y=result_df["Actual"], mode="lines+markers", name="Actual"))
+    fig.add_trace(go.Scatter(x=result_df["Date"], y=result_df["Predicted"], mode="lines+markers", name="Predicted"))
+    fig.update_layout(
+        title="Actual vs Predicted Average Price",
+        xaxis_title="Date",
+        yaxis_title="Price (Rs)",
+        template="plotly_dark"
+    )
 
     st.plotly_chart(fig, use_container_width=True)
+
